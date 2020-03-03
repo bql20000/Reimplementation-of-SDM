@@ -1,4 +1,5 @@
 import numpy as pd
-import dataHandler
+import dataGenerator
 
+images, annots = dataGenerator.readAndScaleData()
 
