@@ -30,7 +30,7 @@ def readAndScaleData():
     annots = []
     path = 'data'
     count = 0
-    img_size = 512      # 512 x 512
+    img_size = 256      # 256 x 256
     for foldername in os.listdir(path):
         img = cv2.imread(path + '/' + foldername + '/' + 'firstFrame.png')
         annot = pandas.read_csv(path + '/' + foldername + '/' + 'annot/' + '000001.pts')['version: 1'][2:-1]
@@ -60,8 +60,41 @@ def readAndScaleData():
     return np.asarray(images), np.asarray(annots)
 
 
+def readAndScaleVideo1():
+    images = []
+    annots = []
+    frame_folder = 'data/001/frames_from_opencv/'
+    annot_foler = 'data/001/annot/'
+    img_size = 256      # 256 x 256
+    height = 720
+    width = 1280
+    count = 0
+    n_images = 200
+    for filename in os.listdir(frame_folder):
+        img = cv2.imread(frame_folder + '/' + filename)
+        images.append(cv2.resize(img, (img_size, img_size)))
+        count += 1
+        print(count)
+        if (count == 1): plt.imshow(images[-1])
+        if (count > n_images): break
+    count = 0
+    for filename in os.listdir(annot_foler):
+        annot = pandas.read_csv(annot_foler + '/' + filename)['version: 1'][2:-1]
+        list_annot = []
+        count += 1
+        print(count)
+        for ss in annot:
+            x, y = ss.split(' ')
+            x = float(x) * img_size / width
+            y = float(y) * img_size / height
+            list_annot.append([x, y])
+            if (count == 1): plt.scatter(x, y)
+        annots.append(np.asarray(list_annot))
+        if (count > n_images): break
+    return np.asarray(images), np.asarray(annots)
+
 # -------------------------------------------- MAIN --------------------------------------------------------------------
 # readAllFrames('data/001/vid.avi')     # done
 # extractFirstFrameEachVideo()          # done
 
-images, annots = readAndScaleData()
+# images, annots = readAndScaleData()

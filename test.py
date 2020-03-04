@@ -1,6 +1,10 @@
-from pip._vendor.distlib.compat import raw_input
-import matplotlib.pyplot as plt
-x = [2, 5, 1]
-y = [4, 6 , 2]
-plt.scatter(x, y)
-plt.show()
+import cv2
+
+img = cv2.imread('data/001/firstFrame.png')
+print(img.shape)
+
+import featureExtractor
+
+img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+img_gray = cv2.resize(img_gray, (128, 128))
+featureExtractor.LBP(img_gray, 1)
