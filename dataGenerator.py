@@ -69,7 +69,7 @@ def readAndScaleVideo1():
     height = 720
     width = 1280
     count = 0
-    n_images = 200
+    n_images = 300
     for filename in os.listdir(frame_folder):
         img = cv2.imread(frame_folder + '/' + filename)
         images.append(cv2.resize(img, (img_size, img_size)))
@@ -88,7 +88,6 @@ def readAndScaleVideo1():
             x = float(x) * img_size / width
             y = float(y) * img_size / height
             list_annot.append([x, y])
-            if (count == 1): plt.scatter(x, y)
         annots.append(np.asarray(list_annot))
         if (count > n_images): break
     return np.asarray(images), np.asarray(annots)

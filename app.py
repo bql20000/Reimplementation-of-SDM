@@ -2,6 +2,7 @@ from flask import Flask, request, redirect, render_template
 import matplotlib.pyplot as plt
 import dataGenerator
 import mySDM
+import cv2
 
 # todo: generate data
 images, annots = dataGenerator.readAndScaleVideo1()
@@ -12,13 +13,14 @@ sdm.fit(images, annots)
 
 def add_landmarks_and_save(img):
     result_path = 'demo/result.png'
+    img = cv2.imread('demo/test.png')
     landmarks = sdm.predict(img)
     plt.show(img)
     for i in range(landmarks.shape[0]):
         plt.scatter(landmarks[i][0], landmarks[i][1], color='g')
     plt.axes.get_xaxis().set_visible(False)
     plt.axes.get_yaxis().set_visible(False)
-    img.save(result_path)
+    plt.savefig(result_path)
     return img
 
 
@@ -34,7 +36,15 @@ def index():
 def result():
     for img in request.files.getlist("file"):
         img.save('demo/test.png')
-        add_landmarks_and_save(img)
+        #add_landmarks_and_save(img)
+        img = cv2.imread('demo/test.png')
+        landmarks = sdm.predict(img)
+        plt.show(img)
+        for i in range(landmarks.shape[0]):
+            plt.scatter(landmarks[i][0], landmarks[i][1], color='g')
+        plt.axes.get_xaxis().set_visible(False)
+        plt.axes.get_yaxis().set_visible(False)
+        plt.savefig('demo/result.png')
     return render_template('result.html')
 
 
